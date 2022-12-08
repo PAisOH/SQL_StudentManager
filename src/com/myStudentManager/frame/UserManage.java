@@ -74,7 +74,7 @@ public class UserManage extends JDialog {
 		jPasswordField_user_password = new JPasswordField();
 		jPasswordField_user_password.setBounds(new Rectangle(98, 222, 165, 26));
 		jComboBox_user_privilege = new JComboBox();// 不要漏了这句话
-		jComboBox_user_privilege.addItem("管理员");
+		jComboBox_user_privilege.addItem("教务处");
 		jComboBox_user_privilege.addItem("普通用户");
 		jComboBox_user_privilege.setBounds(new Rectangle(99, 256, 163, 27));
 		jButton_delete = new JButton();

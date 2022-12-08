@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class DBConnection {
 	private static Connection conn ;
 	private static Statement stmt ;
-    private static final String drivername="com.mysql.jdbc.Driver";
+    private static final String drivername="com.mysql.cj.jdbc.Driver";
     private static final String url="jdbc:mysql://localhost:3307/coursechoose?characterEncoding=utf8";
     private static final String username="chatmanager";
     private static final String password="123456";

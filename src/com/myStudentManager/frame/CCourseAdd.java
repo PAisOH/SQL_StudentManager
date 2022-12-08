@@ -125,7 +125,7 @@ public class CCourseAdd extends JDialog {
 		ClassDao cd = new ClassDao();
 		jComboBox_stu = new JComboBox();
 		StudentDao sd = new StudentDao();		
-		if(Login.login_user_type == 2){//某个学生登陆，只能选择自己的课程，不能选择别人的课程
+		if(Login.login_user_type == 2){//某个学生登录，只能选择自己的课程，不能选择别人的课程
 			StudentDao studentDao = new StudentDao();
 			StudentModel studentModel = studentDao.getStudentByName(Login.storeUserName);
 			ClassDao cdClassDao = new ClassDao();

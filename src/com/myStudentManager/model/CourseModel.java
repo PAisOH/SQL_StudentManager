@@ -53,8 +53,15 @@ public class CourseModel {
 	public void setTeach_name(String teach_name) {
 		this.teach_name = teach_name;
 	}
-	
-	
-	
 
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof CourseModel)) {
+			return false;
+		}
+		CourseModel courseModel = (CourseModel)obj;
+		return this.course_id.equals(courseModel.course_id)
+				&& this.teach_id.equals(courseModel.teach_id);
+	}
 }

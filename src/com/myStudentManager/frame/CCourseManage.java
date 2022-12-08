@@ -29,7 +29,6 @@ import com.myStudentManager.model.TeacherModel;
 import javax.swing.JCheckBox;
 
 public class CCourseManage extends JDialog {
-
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JScrollPane jScrollPane = null;

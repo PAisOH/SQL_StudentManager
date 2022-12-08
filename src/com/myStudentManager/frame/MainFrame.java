@@ -8,15 +8,7 @@ package com.myStudentManager.frame;
  * @Email 646749375@qq.com
  * 本程序可以由任何人自由发表、修改、传播，请保留此注视，谢谢！
  */
-import java.awt.AWTException;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.Rectangle;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +24,8 @@ import javax.swing.*;
 
 import com.myStudentManager.util.DBConnection;
 import com.myStudentManager.util.DBInit;
+
+import static com.myStudentManager.frame.Login.storeUserName;
 
 public class MainFrame extends JFrame {
 
@@ -49,10 +43,11 @@ public class MainFrame extends JFrame {
 	private JButton btn_score_add = null;
 	private JTextArea ta_sql_search = null;
 	private JButton btn_send = null;
+	private JButton btn_student_ccourse = null;
 
-	private JMenu jMenu_ccourse = null;
-	private JMenu jMenu_mark = null;
-	private JMenu jMenu_help = null;
+//	private JMenu jMenu_ccourse = null;
+//	private JMenu jMenu_mark = null;
+//	private JMenu jMenu_help = null;
 	private JMenuItem jMenuItem_relogin = null;
 	public JMenuItem jMenuItem_initDB = null;
 	private JMenuItem jMenuItem_change_password = null;
@@ -84,14 +79,15 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		super();
 		initialize();
-		btn_teacher.setBounds(50, 50, 91, 40);
-		btn_student.setBounds(180, 50, 91, 40);
-		btn_course.setBounds(310, 50, 91, 40);
-		btn_score.setBounds(440, 50, 91, 40);
-		btn_course_add.setBounds(310, 150, 91, 40);
-		btn_score_add.setBounds(440, 150, 91, 40);
+		btn_teacher.setBounds(50, 50, 120, 40);
+		btn_student.setBounds(180, 50, 120, 40);
+		btn_course.setBounds(310, 50, 120, 40);
+		btn_score.setBounds(440, 50, 120, 40);
+		btn_course_add.setBounds(310, 150, 120, 40);
+		btn_score_add.setBounds(440, 150, 120, 40);
 		ta_sql_search.setBounds(100, 200, 300, 100);
-		btn_send.setBounds(420, 200, 91, 40);
+		btn_send.setBounds(420, 200, 120, 40);
+		btn_student_ccourse.setBounds(50, 150, 120, 40);
 		initPrivilege();
 		this.add(btn_teacher);
 		this.add(btn_student);
@@ -101,16 +97,18 @@ public class MainFrame extends JFrame {
 		this.add(btn_score_add);
 		this.add(ta_sql_search);
 		this.add(btn_send);
+		this.add(btn_student_ccourse);
 	}
 
 	private void initialize() {		
-		this.setSize(600, 432);// 主界面大小
+		this.setSize(640, 432);// 主界面大小
 		this.setTitle("学生选课管理系统");
 //		imgURL = this.getClass().getResource("/com/chenluozhi/images/icon.png");
 //		this.setIconImage(Toolkit.getDefaultToolkit().getImage(imgURL));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setVisible(true);
+//		this.setLayout(new FlowLayout());
 
 
 		this.addWindowListener(new WindowAdapter()// 系统关闭事件
@@ -183,13 +181,16 @@ public class MainFrame extends JFrame {
 		jMenu_backstage .add(jMenuItem_grade_class);
 		jMenu_backstage .add(jMenuItem_class);
 
-		btn_teacher = new JButton("教师信息");
+		btn_teacher = new JButton("教师信息" );
+//		btn_teacher.setSize(200, 30);
+		btn_teacher.setText("教师信息");
 		btn_student = new JButton("学生信息");
 		btn_course = new JButton("课程信息");
 		btn_score = new JButton("分数信息");
 		btn_course_add = new JButton("课程管理");
 		btn_score_add = new JButton("分数录入");
 		btn_send = new JButton("SQL搜索");
+		btn_student_ccourse = new JButton("学生课程管理");
 
 //		jMenu_ccourse = new JMenu();
 //		jMenu_ccourse.setText("选课情况");
@@ -229,6 +230,7 @@ public class MainFrame extends JFrame {
 		btn_score_add.addActionListener(btn);
 		btn_course_add.addActionListener(btn);
 		btn_send.addActionListener(btn);
+		btn_student_ccourse.addActionListener(btn);
 
 		jMenuItem_relogin.addActionListener(btn);
 		jMenuItem_change_password.addActionListener(btn);
@@ -315,35 +317,35 @@ public class MainFrame extends JFrame {
 	}
 
 	public void initPrivilege() {
+		if(Login.login_user_type==0){
+			btn_student_ccourse.setVisible(false);
+		}
 		if (Login.login_user_type==1) {
 			jMenuItem_change_password.setEnabled(false);
 			jMenuItem_operate_log.setEnabled(false);
 			jMenuItem_initDB.setEnabled(false);
 			jMenuItem_user_manage.setEnabled(false);
 			jMenu_backstage .setEnabled(false);
-		} else if(Login.login_user_type==0){
-		} else if(Login.login_user_type==2){
-			jMenuItem_change_password.setEnabled(false);
-			jMenuItem_operate_log.setEnabled(false);
-			jMenuItem_initDB.setEnabled(false);
-			jMenuItem_user_manage.setEnabled(false);
-			jMenuItem_sys_info.setEnabled(false);
-					
-			jMenu_mark.setEnabled(false);
-			jMenu_backstage .setEnabled(false);
-			
-		} else {
-			jMenuItem_change_password.setEnabled(false);
-			jMenuItem_operate_log.setEnabled(false);
-			jMenuItem_initDB.setEnabled(false);
-			jMenuItem_user_manage.setEnabled(false);
-			jMenuItem_sys_info.setEnabled(false);
-					
-			jMenu_mark.setEnabled(false);
-			jMenu_backstage .setEnabled(false);
-			
+			btn_student_ccourse.setVisible(false);
 		}
-		
+		if(Login.login_user_type==2){
+
+			jMenuItem_change_password.setEnabled(false);
+			jMenuItem_operate_log.setEnabled(false);
+			jMenuItem_initDB.setEnabled(false);
+			jMenuItem_user_manage.setEnabled(false);
+			jMenuItem_sys_info.setEnabled(false);
+
+			jMenu_backstage.setEnabled(false);
+			btn_teacher.setVisible(false);
+			btn_student.setVisible(false);
+			btn_send.setVisible(false);
+			btn_course.setVisible(false);
+			btn_course_add.setVisible(false);
+			btn_score.setVisible(false);
+			btn_score_add.setVisible(false);
+
+		}
 	}
 
 	/**
@@ -357,7 +359,7 @@ public class MainFrame extends JFrame {
 				login.setVisible(true);
 			} else if (e.getSource() == jMenuItem_change_password) {
 				if(Login.login_user_type!=0)
-					{JOptionPane.showMessageDialog(null, "对不起，非后台管理员暂不提供修改密码功能");
+					{JOptionPane.showMessageDialog(null, "对不起，非教务处暂不提供修改密码功能");
 					return;
 					}
 				UserChangePassword cp = new UserChangePassword();
@@ -451,6 +453,10 @@ public class MainFrame extends JFrame {
 					e1.printStackTrace();
 				}
 
+			}
+			if (e.getSource() == btn_student_ccourse) {
+				StudentCourseManage scm = new StudentCourseManage();
+				scm.setVisible(true);
 			}
 		}
 

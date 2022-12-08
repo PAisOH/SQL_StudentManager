@@ -80,7 +80,7 @@ public class Login extends JFrame {
 //        jLabel_tips.setText("管理员使用账号登陆，非管理员请使用ID登陆");
 //        this.setResizable(false);
         this.setSize(296, 256);
-        this.setTitle("欢迎登陆");
+        this.setTitle("欢迎登录");
         this.setLocationRelativeTo(null);
          this.setUndecorated(true);//设置无边框
         try {
@@ -117,23 +117,23 @@ public class Login extends JFrame {
         jLabel.setBounds(new Rectangle(0, -1, 291, 142));
         jLabel_password = new JLabel();
         jLabel_password.setBounds(new Rectangle(29, 110, 71, 19));
-        jLabel_password.setText("密 码：");
+        jLabel_password.setText("密 码");
         jLabel_userName = new JLabel();
         jLabel_userName.setBounds(new Rectangle(29, 81, 71, 19));
-        jLabel_userName.setText("用户名：");
+        jLabel_userName.setText("用户名");
         jLabel_User = new JLabel();
         jLabel_User.setBounds(new Rectangle(10, 47, 275, 98));
 
 
         jLabel_privilege = new JLabel();
-        jLabel_privilege.setBounds(new Rectangle(18, 152, 71, 19));
-        jLabel_privilege.setText("登陆类型：");
+        jLabel_privilege.setBounds(new Rectangle(18, 152, 101, 19));
+        jLabel_privilege.setText("登录类型：");
 
         jComboBox = new JComboBox();
         jComboBox.setBounds(new Rectangle(109, 152, 123, 23));
-        jComboBox.addItem("管理登陆");
+        jComboBox.addItem("管理登录");
         jComboBox.addItem("老师登录");
-        jComboBox.addItem("学生登陆");
+        jComboBox.addItem("学生登录");
 
 
 
@@ -173,11 +173,10 @@ public class Login extends JFrame {
                 UserDao ud = new UserDao();
                 String user = jTextField.getText().trim();
                 String password =new String(jPasswordField.getPassword()).trim();//char to String
-
+                storeUserId = Integer.parseInt(user);
                 storeUserName = user;
                 storeUserPassword = password;
                 login_user_type=jComboBox.getSelectedIndex();
-
                 if("".equals(user)){
                     JOptionPane.showMessageDialog(null, "用户名不能为空");return;
                 }
@@ -193,41 +192,58 @@ public class Login extends JFrame {
 
                     if(ud.userLogin(login_user_type, storeUserName, storeUserPassword))
                     {
-
                         dispose();
                         MainFrame mf = new MainFrame();
                         mf.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "欢迎 "+ user + "登陆！", "关于选修课程管理系统",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "欢迎 "+ user + "登录！", "关于选修课程管理系统",JOptionPane.INFORMATION_MESSAGE);
                         storeUserId = ud.getUserIdByUserName(storeUserName);
-                        String log_operate = "["+storeUserName+"]"+"管理员登陆系统";
+                        String log_operate = "["+storeUserName+"]"+"教务处登录系统";
                         DBConnection.update("insert into c_log(login_user,log_operate,log_time) values('"+storeUserName+"','"+log_operate+"','"+dt+"')");
                     }else{JOptionPane.showMessageDialog(null, "登录失败");return;}
                     //教师登录
                 }else if(login_user_type==1){
+                    boolean hasNonDigit = false;
+                    for (int i = 0; i < jTextField.getText().length(); ++i) {
+                        if(!Character.isDigit(jTextField.getText().charAt(i))) {
+                            hasNonDigit = true;
+                            break;
+                        }
+                    }
+                    if(!hasNonDigit) {
+                        if (ud.userLogin(login_user_type, storeUserName, storeUserPassword)) {
+                            dispose();
+                            MainFrame mf = new MainFrame();
+                            mf.setVisible(true);
+                            JOptionPane.showMessageDialog(null, "欢迎 " + storeUserName + "号教师登录！", "关于选修课程管理系统", JOptionPane.INFORMATION_MESSAGE);
 
-                    if(ud.userLogin(login_user_type, storeUserName, storeUserPassword))
-                    {
+                            String log_operate = "[" + storeUserName + "]号教师" + "用户登陆系统";
+                            DBConnection.update("insert into c_log(login_user,log_operate,log_time) values('" + storeUserName + "','" + log_operate + "','" + dt + "')");
 
-                        dispose();
-                        MainFrame mf = new MainFrame();
-                        mf.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "欢迎 "+ storeUserName + "号教师登陆！", "关于选修课程管理系统",JOptionPane.INFORMATION_MESSAGE);
-
-                        String log_operate = "["+storeUserName+"]号教师"+"用户登陆系统";
-                        DBConnection.update("insert into c_log(login_user,log_operate,log_time) values('"+storeUserName+"','"+log_operate+"','"+dt+"')");
-
-                    }else{JOptionPane.showMessageDialog(null, "登录失败");return;}
+                        } else {JOptionPane.showMessageDialog(null, "登录失败");return;}
+                    } else {
+                        JOptionPane.showMessageDialog(null, "登录失败");return;
+                    }
                 }else if(login_user_type==2){
-
-                    if(ud.userLogin(login_user_type, storeUserName, storeUserPassword))
-                    {
-                        dispose();
-                        MainFrame mf = new MainFrame();
-                        mf.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "欢迎 "+ user + "号学生登陆！", "关于选修课程管理系统",JOptionPane.INFORMATION_MESSAGE);
-                        String log_operate = "["+storeUserName+"]"+"号学生登陆系统";
-                        DBConnection.update("insert into c_log(login_user,log_operate,log_time) values('"+storeUserName+"','"+log_operate+"','"+dt+"')");
-                    }else{JOptionPane.showMessageDialog(null, "登录失败");return;}
+                    boolean hasNonDigit = false;
+                    for (int i = 0; i < jTextField.getText().length(); ++i) {
+                        if(!Character.isDigit(jTextField.getText().charAt(i))) {
+                            hasNonDigit = true;
+                            break;
+                        }
+                    }
+                    if(!hasNonDigit){
+                        if(ud.userLogin(login_user_type, storeUserName, storeUserPassword))
+                        {
+                            dispose();
+                            MainFrame mf = new MainFrame();
+                            mf.setVisible(true);
+                            JOptionPane.showMessageDialog(null, "欢迎 "+ user + "号学生登录！", "关于选修课程管理系统",JOptionPane.INFORMATION_MESSAGE);
+                            String log_operate = "["+storeUserName+"]"+"号学生登陆系统";
+                            DBConnection.update("insert into c_log(login_user,log_operate,log_time) values('"+storeUserName+"','"+log_operate+"','"+dt+"')");
+                        }else{JOptionPane.showMessageDialog(null, "登录失败");return;}
+                    } else {
+                        JOptionPane.showMessageDialog(null, "登录失败");return;
+                    }
                 }
             }
 
