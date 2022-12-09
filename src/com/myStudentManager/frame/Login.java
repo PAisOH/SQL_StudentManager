@@ -173,10 +173,12 @@ public class Login extends JFrame {
                 UserDao ud = new UserDao();
                 String user = jTextField.getText().trim();
                 String password =new String(jPasswordField.getPassword()).trim();//char to String
-                storeUserId = Integer.parseInt(user);
                 storeUserName = user;
                 storeUserPassword = password;
                 login_user_type=jComboBox.getSelectedIndex();
+                if(login_user_type!=0) {
+                    storeUserId = Integer.parseInt(user);
+                }
                 if("".equals(user)){
                     JOptionPane.showMessageDialog(null, "用户名不能为空");return;
                 }

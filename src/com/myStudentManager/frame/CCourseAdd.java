@@ -242,7 +242,7 @@ public class CCourseAdd extends JDialog {
 						return;
 					} else {
 						
-						ccd.addCCourse(stu_id, course_id,dt);
+						ccd.addCCourse(stu_id, course_id, dt);
 						JOptionPane.showMessageDialog(null, "²Ù×÷³É¹¦");
 						flashTextArea();
 

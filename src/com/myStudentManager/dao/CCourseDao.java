@@ -28,8 +28,6 @@ public class CCourseDao {
 	
 	/**
 	 * @仅仅修改选课
-	 * @param stu_id
-	 * @param course_id
 	 */
 	public boolean modifyCCourse(int stu_id, int old_course_id,int new_course_id) {
 
@@ -400,7 +398,7 @@ public class CCourseDao {
 					"where   c_student.stu_id = c_ccourse.stu_id and c_ccourse.course_id=c_course.course_id and c_course.teach_id = c_teacher.teach_id " +
 					"and (c_course.course_id like '%"+query_word+"%' or course_name like '%"+query_word+"%' or c_ccourse.stu_id like '%"+query_word+"%' or stu_name like '%"+query_word+"%'  or c_course.teach_id like '%"+query_word+"%' or teach_name like '%"+query_word+"%' or ccourse_mark like '%"+query_word+"%')";
 		}else{
-			
+
 			switch(type){
 			case 0:
 				//按编号

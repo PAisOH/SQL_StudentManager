@@ -87,7 +87,7 @@ public class MainFrame extends JFrame {
 		btn_score_add.setBounds(440, 150, 120, 40);
 		ta_sql_search.setBounds(100, 200, 300, 100);
 		btn_send.setBounds(420, 200, 120, 40);
-		btn_student_ccourse.setBounds(50, 150, 120, 40);
+		btn_student_ccourse.setBounds(50, 150, 220, 40);
 		initPrivilege();
 		this.add(btn_teacher);
 		this.add(btn_student);
@@ -151,9 +151,7 @@ public class MainFrame extends JFrame {
 		jMenuItem_mark_add.setText("成绩录入");
 		jMenuItem_mark_statistics = new JMenuItem();
 		jMenuItem_mark_statistics.setText("成绩统计");
-		
-		
-		
+
 		jMenuItem_about = new JMenuItem();
 		jMenuItem_about.setText("关于系统");
 		jMenuItem_sys_info = new JMenuItem();
@@ -327,6 +325,8 @@ public class MainFrame extends JFrame {
 			jMenuItem_user_manage.setEnabled(false);
 			jMenu_backstage .setEnabled(false);
 			btn_student_ccourse.setVisible(false);
+			btn_teacher.setVisible(false);
+			btn_student.setVisible(false);
 		}
 		if(Login.login_user_type==2){
 

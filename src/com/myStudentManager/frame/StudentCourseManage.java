@@ -2,11 +2,8 @@ package com.myStudentManager.frame;
 
 import com.myStudentManager.dao.CCourseDao;
 import com.myStudentManager.dao.CourseDao;
-import com.myStudentManager.dao.StudentDao;
-import com.myStudentManager.dao.TeacherDao;
 import com.myStudentManager.model.CCourseModel;
 import com.myStudentManager.model.CourseModel;
-import com.myStudentManager.model.TeacherModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -15,24 +12,22 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static com.myStudentManager.frame.Login.storeUserId;
-import static com.myStudentManager.frame.Login.storeUserName;
 
 public class StudentCourseManage extends JDialog {
+	Integer operation = 0; //1添加 2删除
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JToolBar jJToolBarBar = null;
 	private JButton jButton_course_add = null;
 //	private JButton jButton_course_edit = null;
-	private JButton jButton_course_query = null;
+//	private JButton jButton_course_query = null;
 	private JButton jButton_course_delete = null;
 	private JButton jButton_course_flash = null;
 	private JLabel jLabel_course_counts = null;
@@ -46,7 +41,7 @@ public class StudentCourseManage extends JDialog {
 	private JScrollPane jScrollPane1 = null;
 	private JTable jTable = null;
 	private JScrollPane jScrollPane = null;
-	private JLabel jLabel = null;
+//	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	//	private JTextArea jTextField_course_info = null;
 	private JPanel jPanel = null;
@@ -55,7 +50,7 @@ public class StudentCourseManage extends JDialog {
 //	private JLabel jLabel_teach_name = null;
 //	private JTextField jTextField_course_name = null;
 //	private JTextField jTextField_course_credit = null;
-	private JComboBox jComboBox_teach_name = null;
+	private JComboBox jComboBox_course_name = null;
 //	private JTextField jTextField_course_begin_time = null;
 	private JButton jButton_ok = null;
 	private JButton jButton_cancel = null;
@@ -66,8 +61,6 @@ public class StudentCourseManage extends JDialog {
 		initData();
 		StudentCourseManage.btnListener btn = new StudentCourseManage.btnListener();
 		jButton_course_add.addActionListener(btn);
-//		jButton_course_edit.addActionListener(btn);
-		jButton_course_query.addActionListener(btn);
 		jButton_course_delete.addActionListener(btn);
 		jButton_course_flash.addActionListener(btn);
 		jButton_ok.addActionListener(btn);
@@ -83,9 +76,9 @@ public class StudentCourseManage extends JDialog {
 		jLabel1 = new JLabel();
 		jLabel1.setBounds(new Rectangle(478, 71, 96, 31));
 //		jLabel1.setText("课程介绍：");
-		jLabel = new JLabel();
-		jLabel.setText("开课时间：");
-		jLabel.setBounds(new Rectangle(250, 63, 73, 30));
+//		jLabel = new JLabel();
+//		jLabel.setText("开课时间：");
+//		jLabel.setBounds(new Rectangle(250, 63, 73, 30));
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(680, 479);
 		this.setTitle("课程管理");
@@ -93,8 +86,6 @@ public class StudentCourseManage extends JDialog {
 		this.setLocationRelativeTo(null);
 		jButton_course_add = new JButton();
 		jButton_course_add.setText("添加");
-		jButton_course_query = new JButton();
-		jButton_course_query.setText("查询");
 		jButton_course_delete = new JButton();
 		jButton_course_delete.setText("删除");
 		jButton_course_flash = new JButton();
@@ -116,21 +107,20 @@ public class StudentCourseManage extends JDialog {
 		jJToolBarBar = new JToolBar();
 		jJToolBarBar.setBounds(new Rectangle(5, 21, 714, 34));
 		jJToolBarBar.add(jButton_course_add);
-		jJToolBarBar.add(jButton_course_query);
 		jJToolBarBar.add(jButton_course_delete);
 		jJToolBarBar.add(jButton_course_flash);
 		jJToolBarBar.add(jLabel_course_counts);
 
 		jTable = new JTable();
 		jScrollPane = new JScrollPane();
-		jScrollPane.setBounds(new Rectangle(20, 71, 450, 250));
+		jScrollPane.setBounds(new Rectangle(20, 71, 600, 250));
 		jScrollPane.setViewportView(jTable);
 
 
 
 
-		jComboBox_teach_name = new JComboBox();
-		jComboBox_teach_name.setBounds(new Rectangle(326, 18, 148, 30));
+		jComboBox_course_name = new JComboBox();
+		jComboBox_course_name.setBounds(new Rectangle(326, 18, 148, 30));
 
 
 		jPanel = new JPanel();
@@ -139,8 +129,7 @@ public class StudentCourseManage extends JDialog {
 		jPanel.setBorder(BorderFactory.createTitledBorder("课程开设"));
 		jPanel.add(jLabel_course_name, null);
 
-		jPanel.add(jComboBox_teach_name, null);
-		jPanel.add(jLabel, null);
+		jPanel.add(jComboBox_course_name, null);
 		jPanel.add(jButton_ok, null);
 		jPanel.add(jButton_cancel, null);
 
@@ -196,7 +185,7 @@ public class StudentCourseManage extends JDialog {
 		});
 
 		for(int i=0;i<restCourseList.size();i++){
-			jComboBox_teach_name.addItem(restCourseList.get(i).getCourse_name());
+			jComboBox_course_name.addItem(restCourseList.get(i).getCourse_name());
 		}
 
 		flashData();
@@ -205,24 +194,6 @@ public class StudentCourseManage extends JDialog {
 	}
 
 	public void flashData(){
-//		CourseDao cd = new CourseDao();
-//		CCourseDao ccd = new CCourseDao();
-//
-//		int student_id = storeUserId;
-//		try {
-//			student_id = Integer.parseInt(JOptionPane.showInputDialog("按学号查询，请输入要查询的学号："));
-//		} catch (Exception e2) {
-//			// TODO: handle exception
-//			return;
-//		}
-//		course_lists = new ArrayList<>();
-//		List<CCourseModel> cCourseModelList = ccd.getListsByStuId(student_id);
-//		cCourseModelList.stream().forEach(cCourseModel -> {
-//			Integer course_id = cCourseModel.getCourse_id();
-//			List<CourseModel> courseList = cd.getLists(true, course_id);
-//			course_lists.addAll(courseList);
-//		});
-//
 
 		counts = course_lists.size();
 		model.setRowCount(course_lists.size());// 设置行数
@@ -237,6 +208,30 @@ public class StudentCourseManage extends JDialog {
 		jLabel_course_counts.setText("记录数:" + counts + "");
 		jTable.setModel(model);
 		jTable.setAutoCreateRowSorter(true);//为JTable设置排序器
+
+		CourseDao cd = new CourseDao();
+		CCourseDao ccd = new CCourseDao();
+
+		int  student_id = storeUserId;
+		course_lists = new ArrayList<>();
+		List<CCourseModel> cCourseModelList = ccd.getListsByStuId(student_id);
+		cCourseModelList.stream().forEach(cCourseModel -> {
+			Integer course_id = cCourseModel.getCourse_id();
+			List<CourseModel> courseList = cd.getLists(true, course_id);
+			course_lists.addAll(courseList);
+		});
+
+		teacher_lists = cd.getLists(false, -1);
+		List<CourseModel> restCourseList = new ArrayList<>();
+		teacher_lists.stream().forEach(course -> {
+			if(!course_lists.contains(course)) {
+				restCourseList.add(course);
+			}
+		});
+		jComboBox_course_name.removeAllItems();
+		for(int i=0;i<restCourseList.size();i++){
+			jComboBox_course_name.addItem(restCourseList.get(i).getCourse_name());
+		}
 	}
 
 	/**
@@ -248,45 +243,26 @@ public class StudentCourseManage extends JDialog {
 			CCourseDao ccd = new CCourseDao();
 
 			if (e.getSource() == jButton_course_add) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String course_begin_time = sdf.format(new Date());
-//				jTextField_course_info.setEditable(true);
+				operation = 1;
 				jButton_ok.setEnabled(true);
 				jButton_ok.setText("确定");
 			}
-			else if (e.getSource() == jButton_course_delete) {
+			if (e.getSource() == jButton_course_delete) {
+				operation = 2;
 				if (jTable.getSelectedRow() != -1) {
 					int course_id = Integer.parseInt(jTable.getValueAt(jTable.getSelectedRow(), 0).toString());
-					cd.deleteListByCourseId(course_id);
+					ccd.deleteCCourse(storeUserId, course_id);
 					JOptionPane.showMessageDialog(null, "删除成功！");
 					model.removeRow(jTable.getSelectedRow());
 				} else {
 					JOptionPane.showMessageDialog(null, "请选择要删除的行！");
 				}
 			}
-			else if (e.getSource() == jButton_course_query) {
-				int  student_id;
-				try {
-					student_id = Integer.parseInt(JOptionPane.showInputDialog("按学号查询，请输入要查询的学号："));
-				} catch (Exception e2) {
-					// TODO: handle exception
-					return;
-				}
-				course_lists = new ArrayList<>();
-				List<CCourseModel> cCourseModelList = ccd.getListsByStuId(student_id);
-				cCourseModelList.stream().forEach(cCourseModel -> {
-					Integer course_id = cCourseModel.getCourse_id();
-					List<CourseModel> courseList = cd.getLists(true, course_id);
-					course_lists.addAll(courseList);
-				});
-//				course_lists = cd.getLists(true, course_id);
-				flashData();
-			}
-			else if (e.getSource() == jButton_course_flash) {
+			if (e.getSource() == jButton_course_flash) {
 				initData();
 			}
-			else if(e.getSource()==jButton_ok){
-				if("确认修改".equals(jButton_ok.getText())){
+			if (e.getSource() == jButton_ok) {
+				if ("确认修改".equals(jButton_ok.getText())) {
 //					int course_id = Integer.parseInt(jTable.getValueAt(jTable.getSelectedRow(), 0).toString());
 //					int course_credit = Integer.parseInt(jTextField_course_credit.getText().toString());
 //					int teach_id = teacher_lists.get(jComboBox_teach_name.getSelectedIndex()).getTeach_id();
@@ -301,26 +277,30 @@ public class StudentCourseManage extends JDialog {
 //					}
 					return;
 				}
-//				String course_name = jTextField_course_name.getText();
-//				int course_credit = Integer.parseInt(jTextField_course_credit.getText());
-//				String course_begin_time = jTextField_course_begin_time.getText();
-////				String course_info = jTextField_course_info.getText();
-//				int teach_id = teacher_lists.get(jComboBox_teach_name.getSelectedIndex()).getTeach_id();
-//				if(cd.addCourse(course_name, course_credit, course_begin_time, teach_id)) {
-//					JOptionPane.showMessageDialog(null, "添加成功");
-//				} else
-//					JOptionPane.showMessageDialog(null, "添加失败");
-//
-//				course_lists = cd.getLists(false, -1);
-				flashData();
+				if (operation == 1) {
+					String course_name = (String) jComboBox_course_name.getSelectedItem();
+					Integer[] courseId = new Integer[1];
+					teacher_lists.stream().forEach(courseModel -> {
+						if (courseModel.getCourse_name() == course_name) {
+							courseId[0] = courseModel.getCourse_id();
+						}
+					});
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd HH:mm:ss");
+					String dt = sdf.format(new Date());
+					if (ccd.addCCourse(storeUserId, courseId[0], dt)) {
+						JOptionPane.showMessageDialog(null, "添加成功");
+					} else
+						JOptionPane.showMessageDialog(null, "添加失败");
+				}
 			}
-			else if(e.getSource()==jButton_cancel){
+			if (e.getSource() == jButton_cancel) {
 				initData();
-
 			}
 
-
+			flashData();
 		}
+
 	}
 
 	public class tableListener implements ListSelectionListener {
